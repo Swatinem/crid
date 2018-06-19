@@ -1,6 +1,6 @@
 # Crid - The cryptographic ID serializer
 
-[![Build Status](hhttps://img.shields.io/travis/Swatinem/crid.svg)](https://travis-ci.org/Swatinem/crid)
+[![Build Status](https://img.shields.io/travis/Swatinem/crid.svg)](https://travis-ci.org/Swatinem/crid)
 [![Coverage Status](https://img.shields.io/codecov/c/github/Swatinem/crid.svg)](https://codecov.io/gh/Swatinem/crid)
 
 It takes a `Number` and encodes it as a short-url in a way that:
