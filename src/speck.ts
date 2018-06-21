@@ -1,59 +1,55 @@
-const ROUNDS = 23;
-const BITS = 24;
-const DIV = 1 << BITS;
-const MASK = DIV - 1;
+const ROUNDS = 27;
 
 /**
  * This is the Speck Cipher, explained here:
  * https://eprint.iacr.org/2013/404.pdf
  *
- * We use the 48/96 Variant.
- * Since in JS, `Number.MAX_SAFE_INTEGER` is 53bit, we can encode
- * one 48bit block as one number, and the 96bit key as two numbers.
+ * We use the 64/128 Variant.
  *
  * The code is mostly adapted from this JS implementation:
- * https://github.com/hax/speck.js/blob/master/lib/48/96.js
+ * https://github.com/hax/speck.js/blob/master/lib/64/128.js
  */
 class Speck {
-  private key = new Uint32Array(ROUNDS);
+  private schedule = new Uint32Array(ROUNDS);
 
-  constructor(key1: number, key2: number) {
-    let a = Uint32Array.of(key1 & MASK, (key1 / DIV) & MASK, key2 & MASK);
-    let b = (key2 / DIV) & MASK;
+  constructor(key: Uint32Array) {
+    let a = Uint32Array.from(key);
+    let b = key[3];
+
     for (let i = 0; i < ROUNDS; i++) {
-      this.key[i] = b;
+      this.schedule[i] = b;
       const j = 2 - (i % 3);
-      a[j] = ((((a[j] << 16) | (a[j] >>> 8)) + b) & MASK) ^ i;
-      b = (((b << 3) | (b >>> 21)) & MASK) ^ a[j];
+      a[j] = (((a[j] << 24) | (a[j] >>> 8)) + b) ^ i;
+      b = ((b << 3) | (b >>> 29)) ^ a[j];
     }
   }
 
-  public encrypt(num: number) {
-    let x = num & MASK;
-    let y = (num / DIV) & MASK;
+  public encrypt(block: Uint32Array) {
+    let x = block[0];
+    let y = block[1];
+    const { schedule } = this;
 
     for (let i = 0; i < ROUNDS; i++) {
-      x = ((((x << 16) | (x >>> 8)) + y) & MASK) ^ this.key[i];
-      y = (((y << 3) | (y >>> 21)) & MASK) ^ x;
+      x = (((x << 24) | (x >>> 8)) + y) ^ schedule[i];
+      y = ((y << 3) | (y >>> 29)) ^ x;
     }
 
-    num = x + y * DIV;
-    return num;
+    return Uint32Array.of(x, y);
   }
 
-  public decrypt(num: number) {
-    let x = num & MASK;
-    let y = (num / DIV) & MASK;
+  public decrypt(block: Uint32Array) {
+    let x = block[0];
+    let y = block[1];
+    const { schedule } = this;
 
     for (let i = ROUNDS - 1; i >= 0; i--) {
       y = x ^ y;
-      y = ((y << 21) | (y >>> 3)) & MASK;
-      x = ((x ^ this.key[i]) - y) & MASK;
-      x = ((x << 8) | (x >>> 16)) & MASK;
+      y = (y << 29) | (y >>> 3);
+      x = (x ^ schedule[i]) - y;
+      x = (x << 8) | (x >>> 24);
     }
 
-    num = x + y * DIV;
-    return num;
+    return Uint32Array.of(x, y);
   }
 }
 

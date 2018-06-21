@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "rimraf dist && tsc && rollup -c",
-    "test": "tsc && nyc --reporter=html --reporter=json --reporter=text-summary node test/index.ts"
+    "test": "nyc --reporter=html --reporter=json --reporter=text-summary node test/index.ts"
   },
   "author": "Arpad Borsos <arpad.borsos@googlemail.com>",
   "license": "LGPL-3.0",

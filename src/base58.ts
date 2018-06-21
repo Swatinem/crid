@@ -1,3 +1,7 @@
+import { convert32 } from "./base-x";
+
+const CHARS = 11;
+const U32 = 0xffffffff + 1;
 const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const BASE = ALPHABET.length;
 const REVERSE: { [key: string]: number } = {};
@@ -6,31 +10,32 @@ for (let i = 0; i < BASE; i++) {
   REVERSE[char] = i;
 }
 
-/**
- * This is a simple base58 encoder
- *
- * Note that we only need to deal with 48bit numbers here.
- *
- * The code is mostly adapted from this JS implementation:
- * https://github.com/delight-im/ShortURL/blob/master/JavaScript/ShortURL.js
- */
 class Base58 {
-  public static encode(num: number) {
-    let str = "";
+  private static buf = new Uint32Array(CHARS);
 
-    while (num > 0) {
-      str = ALPHABET.charAt(num % BASE) + str;
-      num = Math.floor(num / BASE);
+  public static encode(source: Uint32Array) {
+    const { buf } = this;
+    buf.fill(0);
+    convert32(source, U32, buf, 58);
+    let str = "";
+    for (const char of buf) {
+      str += ALPHABET.charAt(char % BASE);
     }
     return str;
   }
 
   public static decode(str: string) {
-    let num = 0;
-    for (const char of str) {
-      num = num * BASE + REVERSE[char];
+    const { buf } = this;
+    for (let i = 0; i < CHARS; i++) {
+      const char = REVERSE[str[i]];
+      if (char === undefined) {
+        return undefined;
+      }
+      buf[i] = char;
     }
-    return num;
+    const out = new Uint32Array(2);
+    convert32(buf, 58, out, U32);
+    return out;
   }
 }
 

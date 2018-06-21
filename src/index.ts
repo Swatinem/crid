@@ -17,16 +17,18 @@ import Base58 from "./base58";
 class Crid {
   private speck: Speck;
 
-  constructor(key1: number, key2: number) {
-    this.speck = new Speck(key1, key2);
+  constructor(key: Uint32Array) {
+    this.speck = new Speck(key);
   }
 
-  public encode(num: number) {
-    const crypted = this.speck.encrypt(num);
+  public encode(hi: number, lo: number = 0) {
+    const source = Uint32Array.of(hi, lo);
+    const crypted = this.speck.encrypt(source);
     return Base58.encode(crypted);
   }
   public decode(str: string) {
     const decoded = Base58.decode(str);
+    if (!decoded) return;
     return this.speck.decrypt(decoded);
   }
 }
