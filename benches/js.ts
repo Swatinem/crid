@@ -20,7 +20,7 @@ rl.on("line", input => {
     const lo = 0x7475432d;
     const encoded = crid.encode(hi, lo);
     const decoded = crid.decode(encoded);
-    decoded[0] === hi && decoded[1] === lo
+    decoded[0] === hi && decoded[1] === lo;
   }
   const diff = process.hrtime(start);
   const time = diff[0] * NS_PER_SEC + diff[1];

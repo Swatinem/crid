@@ -52,34 +52,3 @@ impl Speck {
     [x, y]
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  #[test]
-  fn test_vectors() {
-    let key = [0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100];
-    let plaintext = [0x3b726574, 0x7475432d];
-    let ciphertext = [0x8c6fa548, 0x454e028b];
-    let speck = Speck::new(key);
-
-    let encoded = speck.encrypt(plaintext);
-    assert_eq!(encoded, ciphertext);
-    let decoded = speck.decrypt(encoded);
-    assert_eq!(decoded, plaintext);
-  }
-
-  quickcheck! {
-    fn check_speck(nums: Vec<u32>) -> bool {
-      if nums.len() < 6 { return true }
-      let key = [nums[0], nums[1], nums[2], nums[3]];
-      let block = [nums[4], nums[5]];
-      let speck = Speck::new(key);
-
-      let encoded = speck.encrypt(block);
-      let decoded = speck.decrypt(encoded);
-      decoded == block
-    }
-  }
-}

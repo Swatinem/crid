@@ -11,7 +11,7 @@ fn bench_converter(c: &mut Criterion) {
   node_js.arg("-T");
   node_js.arg("benches/js.ts");
 
-  let b = Benchmark::new_external("node_js", node_js)
+  let b = Benchmark::new_external("js", node_js)
     .with_function("rust", |b| {
       let key = [0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100];
       let crid = Crid::new(key);
@@ -22,9 +22,9 @@ fn bench_converter(c: &mut Criterion) {
         decoded == block
       })
     })
-    .throughput(Throughput::Bytes(16));
+    .throughput(Throughput::Elements(1));
 
-  c.bench("Base conversion", b);
+  c.bench("Crid", b);
 }
 
 criterion_group!(benches, bench_converter);
