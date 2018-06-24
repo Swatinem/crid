@@ -1,0 +1,17 @@
+[package]
+name = "crid-src"
+version = "0.1.0"
+publish = false
+
+[workspace]
+members = ["crid", "native"]
+
+[dependencies]
+crid = { path = "crid" }
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "crid"
+harness = false

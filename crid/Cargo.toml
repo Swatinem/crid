@@ -1,0 +1,10 @@
+[package]
+name = "crid"
+version = "0.1.0"
+authors = ["Arpad Borsos <arpad.borsos@googlemail.com>"]
+
+[lib]
+name = "crid"
+
+[dev-dependencies]
+quickcheck = "0.6"

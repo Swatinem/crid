@@ -1,23 +1,15 @@
 [package]
-name = "crid"
+name = "crid-neon"
 version = "0.1.0"
-authors = ["Arpad Borsos <arpad.borsos@googlemail.com>"]
-# build = "neon_build.rs"
+publish = false
 
 [lib]
-name = "crid"
-# crate-type = ["dylib"]
+name = "crid_neon"
+crate-type = ["dylib"]
 
 [build-dependencies]
 neon-build = "0.1.23"
 
 [dependencies]
 neon = "0.1.23"
-
-[dev-dependencies]
-quickcheck = "0.6"
-criterion = "0.2"
-
-[[bench]]
-name = "crid"
-harness = false
+crid = { path = "../crid" }
