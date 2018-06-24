@@ -38,6 +38,7 @@
       "json",
       "text-summary"
     ],
+    "coveragePathIgnorePatterns": ["src/impls.ts"],
     "moduleFileExtensions": [
       "ts",
       "tsx",

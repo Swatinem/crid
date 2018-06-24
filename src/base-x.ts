@@ -4,7 +4,7 @@ export function convert32(
   dest: Array<number>,
   destBase: number,
 ) {
-  let length = dest.length;
+  let length = 0;
   for (const digit of source) {
     let carry = digit >>> 0;
     let wrote_length = 0;

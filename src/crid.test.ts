@@ -1,15 +1,17 @@
 import { assertForall, utils } from "jsverify";
 import Crid from "./";
 
+let impls: any;
+try {
+  impls = require("./impls");
+} catch (e) {
+  console.error(e);
+}
+
 function testEachImpl(text: string, fn: (crid: typeof Crid) => void) {
   it(`${text} (js)`, () => fn(Crid));
-  try {
-    const impls = require("./impls");
-    it(`${text} (neon)`, () => fn(impls.neon));
-    it(`${text} (wasm)`, () => fn(impls.wasm));
-  } catch (e) {
-    console.error(e);
-  }
+  (impls ? it : it.skip)(`${text} (neon)`, () => fn(impls.neon));
+  (impls ? it : it.skip)(`${text} (wasm)`, () => fn(impls.wasm));
 }
 
 describe("Crid", () => {
@@ -28,6 +30,14 @@ describe("Crid", () => {
     let crid = new Crid(key);
     expect(crid.decode("11111111110")).toBeUndefined();
     expect(crid.decode("1111111111")).toBeUndefined();
+  });
+
+  testEachImpl("should default second number to 0", Crid => {
+    let key = [0, 0, 0, 0];
+    let crid = new Crid(key);
+    const encoded = crid.encode(1234);
+    const decoded = crid.decode(encoded);
+    expect(decoded).toEqual([1234, 0]);
   });
 
   testEachImpl("should quickcheck", Crid => {

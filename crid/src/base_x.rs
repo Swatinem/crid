@@ -3,7 +3,7 @@
 /// and changed to accept arbitrary bases
 #[inline]
 pub fn convert32(source: &[u32], source_base: u64, dest: &mut [u32], dest_base: u64) {
-  let mut length = dest.len();
+  let mut length = 0;
   for digit in source.iter() {
     let mut carry: u64 = *digit as u64;
     let mut wrote_length = 0;
