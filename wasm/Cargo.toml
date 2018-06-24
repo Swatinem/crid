@@ -1,16 +1,13 @@
 [package]
-name = "crid-neon"
+name = "crid-wasm"
 version = "0.1.0"
 authors = ["Arpad Borsos <arpad.borsos@googlemail.com>"]
 publish = false
 
 [lib]
-name = "crid_neon"
-crate-type = ["dylib"]
-
-[build-dependencies]
-neon-build = "0.1.23"
+name = "crid_wasm"
+crate-type = ["cdylib"]
 
 [dependencies]
-neon = "0.1.23"
+wasm-bindgen = "0.2"
 crid = { path = "../crid" }

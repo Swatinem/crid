@@ -34,22 +34,4 @@ class Crid {
   }
 }
 
-type Impl = "js" | "wasm" | "neon";
-
-let cachedNeon: typeof Crid | undefined;
-function getNeon() {
-  if (cachedNeon) return cachedNeon;
-  cachedNeon = Crid;
-  try {
-    cachedNeon = require("../native").Crid;
-  } catch {}
-  return cachedNeon!;
-}
-
-export default async function(key: Array<number>, impl: Impl = "js") {
-  let Impl: typeof Crid = Crid;
-  if (impl === "neon") {
-    Impl = getNeon();
-  }
-  return new Impl(key);
-}
+export default Crid;

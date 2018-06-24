@@ -1,10 +1,11 @@
 [package]
 name = "crid-src"
 version = "0.1.0"
+authors = ["Arpad Borsos <arpad.borsos@googlemail.com>"]
 publish = false
 
-# [workspace]
-# members = ["crid", "native"]
+[workspace]
+members = ["crid", "wasm"]
 
 [dependencies]
 crid = { path = "crid" }

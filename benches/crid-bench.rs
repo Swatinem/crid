@@ -18,6 +18,9 @@ fn bench_converter(c: &mut Criterion) {
   let mut neon = Command::new("node");
   neon.args(&args);
   neon.arg("neon");
+  let mut wasm = Command::new("node");
+  wasm.args(&args);
+  wasm.arg("wasm");
 
   let b = Benchmark::new("rust", |b| {
     let key = [0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100];
@@ -30,6 +33,7 @@ fn bench_converter(c: &mut Criterion) {
     })
   }).with_program("neon", neon)
     .with_program("js", node)
+    .with_program("wasm", wasm)
     .throughput(Throughput::Elements(1));
 
   c.bench("Crid", b);
