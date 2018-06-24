@@ -28,7 +28,10 @@ declare_types! {
     method encode(call) {
       let scope = call.scope;
       let hi = call.arguments.require(scope, 0)?.check::<JsNumber>()?.value() as u32;
-      let lo = call.arguments.require(scope, 1)?.check::<JsNumber>()?.value() as u32;
+      let lo = match call.arguments.get(scope, 1) {
+        None => 0,
+        Some(num) => num.check::<JsNumber>()?.value() as u32,
+      };
 
       let res = call.arguments.this(scope).grab(|crid| {
         let block = [hi, lo];

@@ -11,7 +11,7 @@ for (let i = 0; i < BASE; i++) {
 }
 
 class Base58 {
-  private static buf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  private static buf = Array(11).fill(0);
 
   public static encode(source: Array<number>) {
     const { buf } = this;

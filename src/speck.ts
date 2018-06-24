@@ -10,10 +10,10 @@ const ROUNDS = 27;
  * https://github.com/hax/speck.js/blob/master/lib/64/128.js
  */
 class Speck {
-  private schedule = new Uint32Array(ROUNDS);
+  private schedule = Array(ROUNDS).fill(0);
 
   constructor(key: Array<number>) {
-    let a = Uint32Array.from(key);
+    let a = Array.from(key);
     let b = key[3];
 
     for (let i = 0; i < ROUNDS; i++) {

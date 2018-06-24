@@ -42,7 +42,8 @@
       "tsx",
       "js",
       "jsx",
-      "json"
+      "json",
+      "node"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"

@@ -3,8 +3,8 @@ name = "crid-src"
 version = "0.1.0"
 publish = false
 
-[workspace]
-members = ["crid", "native"]
+# [workspace]
+# members = ["crid", "native"]
 
 [dependencies]
 crid = { path = "crid" }
@@ -13,5 +13,5 @@ crid = { path = "crid" }
 criterion = "0.2"
 
 [[bench]]
-name = "crid"
+name = "crid-bench"
 harness = false

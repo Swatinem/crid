@@ -7,12 +7,16 @@ use criterion::{black_box, Benchmark, Criterion, Throughput};
 use std::process::Command;
 
 fn bench_converter(c: &mut Criterion) {
-  let mut node = Command::new("ts-node");
-  node.arg("-T");
-  node.arg("benches/js.ts");
-  let mut neon = Command::new("ts-node");
-  neon.arg("-T");
-  neon.arg("benches/js.ts");
+  let args = [
+    "--perf-basic-prof",
+    "node_modules/.bin/ts-node",
+    "-T",
+    "benches/js.ts",
+  ];
+  let mut node = Command::new("node");
+  node.args(&args);
+  let mut neon = Command::new("node");
+  neon.args(&args);
   neon.arg("neon");
 
   let b = Benchmark::new("rust", |b| {
@@ -24,10 +28,9 @@ fn bench_converter(c: &mut Criterion) {
       let decoded = crid.decode(&encoded).unwrap();
       decoded == block
     })
-  })
-  .with_program("neon", neon)
-  .with_program("js", node)
-  .throughput(Throughput::Elements(1));
+  }).with_program("neon", neon)
+    .with_program("js", node)
+    .throughput(Throughput::Elements(1));
 
   c.bench("Crid", b);
 }
