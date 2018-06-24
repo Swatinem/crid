@@ -38,7 +38,6 @@ try {
   neon = require('../native').Crid;
 } catch {}
 
-console.log({neon, js: Crid})
 export {
   Crid as js,
   neon,
