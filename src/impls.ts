@@ -1,6 +1,7 @@
 import js from "./index";
 // @ts-ignore
 import { Crid as neon } from "../native";
+// @ts-ignore
 import { Crid as WasmCrid } from "../wasm/crid_wasm";
 
 class wasm {
