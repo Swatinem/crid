@@ -9,7 +9,7 @@ const rl = createInterface({
 });
 
 const impl = process.argv[2] === "neon" ? "neon" : "js";
-let key = Uint32Array.of(0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100);
+let key = [0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100];
 
 async function main() {
   const crid = await Crid(key, impl);

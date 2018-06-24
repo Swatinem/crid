@@ -7,8 +7,7 @@ use crid::Crid;
 
 use neon::js::class::Class;
 use neon::js::Object;
-use neon::js::{JsFunction, JsNumber, JsObject, JsString, JsUndefined};
-use neon::scope::Scope;
+use neon::js::{JsArray, JsNumber, JsObject, JsString, JsUndefined};
 use neon::vm::Lock;
 
 declare_types! {
@@ -52,14 +51,10 @@ declare_types! {
         Some(res) => res,
       };
 
-      let uint32_array = scope.global().get(scope, "Uint32Array")?.check::<JsObject>()?;
-      let of = uint32_array.get(scope, "of")?.check::<JsFunction>()?;
-      let items = [
-        JsNumber::new(scope, res[0].into()),
-        JsNumber::new(scope, res[1].into()),
-      ];
-      let res = of.call(scope, uint32_array, items.into_iter().cloned())?;
-      Ok(res.upcast())
+      let array = JsArray::new(scope, 2);
+      array.set(0, JsNumber::new(scope, res[0].into()))?;
+      array.set(1, JsNumber::new(scope, res[1].into()))?;
+      Ok(array.upcast())
     }
   }
 }

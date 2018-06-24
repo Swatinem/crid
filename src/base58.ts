@@ -11,9 +11,9 @@ for (let i = 0; i < BASE; i++) {
 }
 
 class Base58 {
-  private static buf = new Uint32Array(CHARS);
+  private static buf = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  public static encode(source: Uint32Array) {
+  public static encode(source: Array<number>) {
     const { buf } = this;
     buf.fill(0);
     convert32(source, U32, buf, 58);
@@ -33,7 +33,7 @@ class Base58 {
       }
       buf[i] = char;
     }
-    const out = new Uint32Array(2);
+    const out = [0, 0];
     convert32(buf, 58, out, U32);
     return out;
   }

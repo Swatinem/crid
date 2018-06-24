@@ -17,15 +17,16 @@ import Base58 from "./base58";
 class Crid {
   private speck: Speck;
 
-  constructor(key: Uint32Array) {
+  constructor(key: Array<number>) {
     this.speck = new Speck(key);
   }
 
   public encode(hi: number, lo: number = 0) {
-    const source = Uint32Array.of(hi, lo);
+    const source = [hi, lo];
     const crypted = this.speck.encrypt(source);
     return Base58.encode(crypted);
   }
+
   public decode(str: string) {
     const decoded = Base58.decode(str);
     if (!decoded) return;
@@ -45,7 +46,7 @@ function getNeon() {
   return cachedNeon!;
 }
 
-export default async function(key: Uint32Array, impl: Impl = "js") {
+export default async function(key: Array<number>, impl: Impl = "js") {
   let Impl: typeof Crid = Crid;
   if (impl === "neon") {
     Impl = getNeon();

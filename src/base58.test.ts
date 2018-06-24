@@ -3,7 +3,7 @@ import { assertForall, utils } from "jsverify";
 
 describe("Base58", () => {
   it("should work for specific input", () => {
-    const expected = Uint32Array.of(0, 0);
+    const expected = [0, 0];
     let encoded = Base58.encode(expected);
     expect(encoded).toEqual("11111111111");
     const decoded = Base58.decode(encoded)!;
@@ -11,8 +11,7 @@ describe("Base58", () => {
   });
 
   it("should quickcheck", () => {
-    assertForall("uint32 & uint32", arr => {
-      const expected = Uint32Array.from(arr);
+    assertForall("uint32 & uint32", expected => {
       const actual = Base58.decode(Base58.encode(expected))!;
       return utils.isEqual(actual, expected)
     });

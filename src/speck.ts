@@ -12,7 +12,7 @@ const ROUNDS = 27;
 class Speck {
   private schedule = new Uint32Array(ROUNDS);
 
-  constructor(key: Uint32Array) {
+  constructor(key: Array<number>) {
     let a = Uint32Array.from(key);
     let b = key[3];
 
@@ -24,7 +24,7 @@ class Speck {
     }
   }
 
-  public encrypt(block: Uint32Array) {
+  public encrypt(block: Array<number>) {
     let x = block[0];
     let y = block[1];
     const { schedule } = this;
@@ -34,10 +34,10 @@ class Speck {
       y = ((y << 3) | (y >>> 29)) ^ x;
     }
 
-    return Uint32Array.of(x, y);
+    return [x >>> 0, y >>> 0];
   }
 
-  public decrypt(block: Uint32Array) {
+  public decrypt(block: Array<number>) {
     let x = block[0];
     let y = block[1];
     const { schedule } = this;
@@ -49,7 +49,7 @@ class Speck {
       x = (x << 8) | (x >>> 24);
     }
 
-    return Uint32Array.of(x, y);
+    return [x >>> 0, y >>> 0];
   }
 }
 
