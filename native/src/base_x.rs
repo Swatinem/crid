@@ -1,6 +1,7 @@
 /// This is a low-level base converter.
 /// Code is adopted mostly from https://github.com/bitcoin/bitcoin/blob/master/src/base58.cpp
 /// and changed to accept arbitrary bases
+#[inline]
 pub fn convert32(source: &[u32], source_base: usize, dest: &mut [u32], dest_base: usize) {
   let mut length = dest.len();
   for digit in source.iter() {

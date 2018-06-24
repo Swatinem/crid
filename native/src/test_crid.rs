@@ -13,7 +13,7 @@ quickcheck! {
     let block = [hi, lo];
     let crid = Crid::new(key);
 
-    let encoded = crid.encode_str(block);
+    let encoded = crid.encode_to_str(block);
     let decoded = crid.decode(&encoded).unwrap();
     decoded == block
   }

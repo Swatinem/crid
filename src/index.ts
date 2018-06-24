@@ -33,4 +33,15 @@ class Crid {
   }
 }
 
+let neon = undefined;
+try {
+  neon = require('../native').Crid;
+} catch {}
+
+console.log({neon, js: Crid})
+export {
+  Crid as js,
+  neon,
+}
+
 export default Crid;

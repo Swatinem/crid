@@ -1,5 +1,5 @@
 import readline from "readline";
-import Crid from "../src";
+import {js, neon} from "../../src";
 
 const NS_PER_SEC = 1e9;
 
@@ -8,12 +8,13 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+let key = Uint32Array.of(0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100);
+
+const Crid = process.argv[2] === "neon" ? neon : js;
+const crid = new Crid(key);
+
 rl.on("line", input => {
   const num = Number(input);
-
-  let key = Uint32Array.of(0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100);
-  let crid = new Crid(key);
-
   const start = process.hrtime();
   for (let i = 0; i < num; i++) {
     const hi = 0x3b726574;

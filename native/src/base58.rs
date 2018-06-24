@@ -2,7 +2,8 @@
 use base_x::convert32;
 use super::Block;
 
-const CHARS: usize = 11;
+pub const CHARS: usize = 11;
+pub type Buf = [u8; CHARS];
 static ALPHABET: &[u8; 58] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 #[cfg_attr(rustfmt, rustfmt_skip)]
 static REVERSE: &[i8; 128] = &[
@@ -16,34 +17,24 @@ static REVERSE: &[i8; 128] = &[
   47,48,49,50,51,52,53,54, 55,56,57,-1,-1,-1,-1,-1,
 ];
 
-pub fn encode(block: Block) -> [u8; 11] {
+pub fn encode(block: Block, string: &mut Buf) {
   let mut buf = [0; CHARS];
 
   convert32(&block, 1 << 32, &mut buf, 58);
 
-  let mut string = [0; CHARS];
   for (ch, bufch) in string.iter_mut().zip(buf.iter()) {
-    *ch = ALPHABET[*bufch as usize];
+    *ch = unsafe { *ALPHABET.get_unchecked(*bufch as usize) };
   }
-  string
 }
 
-pub fn encode_std(block: Block) -> String {
-  let string = encode(block);
-  unsafe { String::from_utf8_unchecked(string.to_vec()) }
-}
-
-pub fn decode(string: &str) -> Option<Block> {
-  if string.len() < CHARS {
-    return None;
-  }
+pub fn decode(string: &Buf) -> Option<Block> {
   let mut buf = [0; CHARS];
 
   for (ch, bufch) in string
-    .chars()
+    .iter()
     .zip(buf.iter_mut())
   {
-    let ch = *REVERSE.get(ch as usize)?;
+    let ch = *REVERSE.get(*ch as usize)?;
     if ch == -1 {
       return None;
     }
