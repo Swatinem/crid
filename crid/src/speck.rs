@@ -1,4 +1,3 @@
-pub type Block = [u32; 2];
 pub type Key = [u32; 4];
 
 const ROUNDS: usize = 27;
@@ -36,19 +35,21 @@ impl Speck {
     Speck { schedule }
   }
 
-  pub fn encrypt(&self, block: Block) -> Block {
-    let [mut x, mut y] = block;
+  pub fn encrypt(&self, num: u64) -> u64 {
+    let mut x: u32 = (num >> 32) as u32;
+    let mut y: u32 = num as u32;
     for &k in &self.schedule {
       round(&mut x, &mut y, k);
     }
-    [x, y]
+    (x as u64) << 32 | y as u64
   }
 
-  pub fn decrypt(&self, block: Block) -> Block {
-    let [mut x, mut y] = block;
+  pub fn decrypt(&self, num: u64) -> u64 {
+    let mut x: u32 = (num >> 32) as u32;
+    let mut y: u32 = num as u32;
     for &k in self.schedule.iter().rev() {
       reverse(&mut x, &mut y, k);
     }
-    [x, y]
+    (x as u64) << 32 | y as u64
   }
 }

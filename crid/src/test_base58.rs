@@ -1,11 +1,10 @@
 use super::base58::*;
 
 quickcheck! {
-  fn check_base_58(hi: u32, lo: u32) -> bool {
-    let source = [hi, lo];
+  fn check_base_58(num: u64) -> bool {
     let mut buf = [0; CHARS];
-    encode(source, &mut buf);
+    encode(num, &mut buf);
     let decoded = decode(&buf).unwrap();
-    decoded == source
+    decoded == num
   }
 }

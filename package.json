@@ -2,6 +2,8 @@
   "name": "crid",
   "version": "2.0.0",
   "description": "Crid - The cryptographic ID serializer",
+  "author": "Arpad Borsos <arpad.borsos@googlemail.com>",
+  "license": "LGPL-3.0",
   "main": "dist/crid.cjs.js",
   "module": "dist/crid.esm.js",
   "browser": "dist/crid.umd.js",
@@ -29,8 +31,6 @@
     "prepublishOnly": "npm run test && npm run build",
     "test": "tsc && jest"
   },
-  "author": "Arpad Borsos <arpad.borsos@googlemail.com>",
-  "license": "LGPL-3.0",
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
@@ -38,7 +38,9 @@
       "json",
       "text-summary"
     ],
-    "coveragePathIgnorePatterns": ["src/impls.ts"],
+    "coveragePathIgnorePatterns": [
+      "src/impls.ts"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",

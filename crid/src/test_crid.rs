@@ -8,13 +8,12 @@ fn invalid_input() {
 }
 
 quickcheck! {
-  fn check_crid(k1: u32, k2: u32, k3: u32, k4: u32, hi: u32, lo: u32) -> bool {
+  fn check_crid(k1: u32, k2: u32, k3: u32, k4: u32, num: u64) -> bool {
     let key = [k1, k2, k3, k4];
-    let block = [hi, lo];
     let crid = Crid::new(key);
 
-    let encoded = crid.encode_to_str(block);
+    let encoded = crid.encode_to_str(num);
     let decoded = crid.decode(&encoded).unwrap();
-    decoded == block
+    decoded == num
   }
 }

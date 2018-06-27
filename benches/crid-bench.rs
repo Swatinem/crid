@@ -25,11 +25,11 @@ fn bench_converter(c: &mut Criterion) {
   let b = Benchmark::new("rust", |b| {
     let key = [0x1b1a1918, 0x13121110, 0x0b0a0908, 0x03020100];
     let crid = Crid::new(key);
-    let block = black_box([0x3b726574, 0x7475432d]);
+    let num = black_box((0x3b726574 as u64) << 32 | 0x7475432d as u64);
     b.iter(|| {
-      let encoded = crid.encode_to_str(block);
+      let encoded = crid.encode_to_str(num);
       let decoded = crid.decode(&encoded).unwrap();
-      decoded == block
+      decoded == num
     })
   }).with_program("neon", neon)
     .with_program("js", node)

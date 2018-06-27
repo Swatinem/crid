@@ -34,8 +34,8 @@ declare_types! {
       };
 
       let res = call.arguments.this(scope).grab(|crid| {
-        let block = [hi, lo];
-        crid.encode_to_str(block)
+        let num = (hi as u64) << 32 | lo as u64;
+        crid.encode_to_str(num)
       });
 
       Ok(JsString::new_or_throw(scope, &res)?.upcast())
@@ -55,8 +55,8 @@ declare_types! {
       };
 
       let array = JsArray::new(scope, 2);
-      array.set(0, JsNumber::new(scope, res[0].into()))?;
-      array.set(1, JsNumber::new(scope, res[1].into()))?;
+      array.set(0, JsNumber::new(scope, (res >> 32) as f64))?;
+      array.set(1, JsNumber::new(scope, (res as u32).into()))?;
       Ok(array.upcast())
     }
   }

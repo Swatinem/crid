@@ -1,8 +1,5 @@
-// https://github.com/bitcoin/bitcoin/blob/master/src/base58.cpp
-use base_x::convert32;
-use super::Block;
-
 pub const CHARS: usize = 11;
+const BASE: u64 = 58;
 pub type Buf = [u8; CHARS];
 static ALPHABET: &[u8; 58] = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -17,32 +14,24 @@ static REVERSE: &[i8; 128] = &[
   47,48,49,50,51,52,53,54, 55,56,57,-1,-1,-1,-1,-1,
 ];
 
-pub fn encode(block: Block, string: &mut Buf) {
-  let mut buf = [0; CHARS];
-
-  convert32(&block, 1 << 32, &mut buf, 58);
-
-  for (ch, bufch) in string.iter_mut().zip(buf.iter()) {
-    *ch = unsafe { *ALPHABET.get_unchecked(*bufch as usize) };
+pub fn encode(mut num: u64, string: &mut Buf) {
+  for ch in string.iter_mut().rev() {
+    let rem = num % BASE;
+    num = num / BASE;
+    *ch = unsafe { *ALPHABET.get_unchecked(rem as usize) };
   }
 }
 
-pub fn decode(string: &Buf) -> Option<Block> {
-  let mut buf = [0; CHARS];
+pub fn decode(string: &Buf) -> Option<u64> {
+  let mut num = 0;
 
-  for (ch, bufch) in string
-    .iter()
-    .zip(buf.iter_mut())
-  {
+  for ch in string.iter() {
     let ch = *REVERSE.get(*ch as usize)?;
     if ch == -1 {
       return None;
     }
-    *bufch = ch as u32
+    num = num * BASE + ch as u64;
   }
 
-  let mut block = [0; 2];
-  convert32(&buf, 58, &mut block, 1 << 32);
-
-  Some(block)
+  Some(num)
 }
